@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="E:\Repo\Git\ChatUIDemo\app\build\intermediates\exploded-aar\com.android.support\support-v4\20.0.0\jars\libs\internal_impl-20.0.0.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d">
+        <dex dex="E:\Repo\Git\ChatUIDemo\app\build\intermediates\pre-dexed\debug\internal_impl-20.0.0-78f9a6546b6c3760393a6ef1dcc984c66bc86c22.jar" />
+    </item>
+    <item
+        jar="E:\Repo\Git\ChatUIDemo\app\libs\picasso-2.4.0.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="f36d2d4e3a36b3259aaf9d004d29b4cdc6c1bfb2">
+        <dex dex="E:\Repo\Git\ChatUIDemo\app\build\intermediates\pre-dexed\debug\picasso-2.4.0-142f9a79aea24c832217502fb70bd3ec22c61fd9.jar" />
+    </item>
+    <item
+        jar="E:\Repo\Git\ChatUIDemo\app\libs\easemobchat_2.2.2.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="6b9388b9b8895ac9551dcc58c70019a83e03204f">
+        <dex dex="E:\Repo\Git\ChatUIDemo\app\build\intermediates\pre-dexed\debug\easemobchat_2.2.2-3a309757b2354ea1536d28b3143e614df609f5ac.jar" />
+    </item>
+    <item
+        jar="E:\Android\DevelopTools\android-sdk\extras\android\m2repository\com\android\support\support-annotations\20.0.0\support-annotations-20.0.0.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="9d9013e9ff35fc3756411e62873c363c70c638fa">
+        <dex dex="E:\Repo\Git\ChatUIDemo\app\build\intermediates\pre-dexed\debug\support-annotations-20.0.0-e918a4c1eee1d6c673fe7495356fc07349c5eb87.jar" />
+    </item>
+    <item
+        jar="E:\Repo\Git\ChatUIDemo\app\libs\Parse-1.9.4.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="56c22930b5d4f77015b6a40c7f14103d3e101001">
+        <dex dex="E:\Repo\Git\ChatUIDemo\app\build\intermediates\pre-dexed\debug\Parse-1.9.4-f2a86a0c5324f01b0e55f7abf8241394ae181b0f.jar" />
+    </item>
+    <item
+        jar="E:\Repo\Git\ChatUIDemo\app\libs\google-play-services.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="f0d8e4a84fad131bc291c3c4850afcaa8ba0b299">
+        <dex dex="E:\Repo\Git\ChatUIDemo\app\build\intermediates\pre-dexed\debug\google-play-services-f6202b961de74d404b59d27439f9916617a84b11.jar" />
+    </item>
+    <item
+        jar="E:\Repo\Git\ChatUIDemo\app\libs\bolts-android-1.2.0.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd">
+        <dex dex="E:\Repo\Git\ChatUIDemo\app\build\intermediates\pre-dexed\debug\bolts-android-1.2.0-85a55108248bb38009066b3000c9af2ebfa6e938.jar" />
+    </item>
+    <item
+        jar="E:\Repo\Git\ChatUIDemo\app\libs\locSDK_3.3.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="590d32bdf5bb37ee372a21696b8f7853b224e31f">
+        <dex dex="E:\Repo\Git\ChatUIDemo\app\build\intermediates\pre-dexed\debug\locSDK_3.3-94f946791754aa5127e37d7c8c1624dc002e3438.jar" />
+    </item>
+    <item
+        jar="E:\Repo\Git\ChatUIDemo\app\build\intermediates\exploded-aar\com.android.support\support-v4\20.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="8694693636ab36910c8100ce527c258ff3ebece0">
+        <dex dex="E:\Repo\Git\ChatUIDemo\app\build\intermediates\pre-dexed\debug\classes-3735cb488be3828fabaaff35a11e2061bf41439a.jar" />
+    </item>
+    <item
+        jar="E:\Repo\Git\ChatUIDemo\app\libs\umeng-analytics-v5.2.4.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="0f9eccf79ae6006e4346725b09114182dca0c023">
+        <dex dex="E:\Repo\Git\ChatUIDemo\app\build\intermediates\pre-dexed\debug\umeng-analytics-v5.2.4-570aeae3098f09757d382dd721a22a9033889f83.jar" />
+    </item>
+    <item
+        jar="E:\Repo\Git\ChatUIDemo\app\libs\baidumapapi_v3_2_0.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="46ca4c3c74e1ddc60b45c490485e5df05babe6a5">
+        <dex dex="E:\Repo\Git\ChatUIDemo\app\build\intermediates\pre-dexed\debug\baidumapapi_v3_2_0-f04acb55608102424c475faf3a48eddff03b1112.jar" />
+    </item>
+
+</items>
