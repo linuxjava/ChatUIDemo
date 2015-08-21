@@ -245,6 +245,7 @@ public class MessageAdapter extends BaseAdapter{
 		if (message == null) {
 			return -1;
 		}
+
 		if (message.getType() == EMMessage.Type.TXT) {
 			if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false))
 			    return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VOICE_CALL : MESSAGE_TYPE_SENT_VOICE_CALL;
@@ -257,7 +258,6 @@ public class MessageAdapter extends BaseAdapter{
 		}
 		if (message.getType() == EMMessage.Type.IMAGE) {
 			return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_IMAGE : MESSAGE_TYPE_SENT_IMAGE;
-
 		}
 		if (message.getType() == EMMessage.Type.LOCATION) {
 			return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_LOCATION : MESSAGE_TYPE_SENT_LOCATION;
@@ -419,12 +419,15 @@ public class MessageAdapter extends BaseAdapter{
 		    //demo里使用username代码nick
 			UserUtils.setUserNick(message.getFrom(), holder.tv_usernick);
 		}
+		/*********************发送方无需显示自己的昵称 by guochangxiao********************************/
 		if(message.direct == EMMessage.Direct.SEND){
 			UserUtils.setCurrentUserNick(holder.tv_usernick);
 		}
 		// 如果是发送的消息并且不是群聊消息，显示已读textview
 		if (!(chatType == ChatType.GroupChat || chatType == ChatType.ChatRoom) && message.direct == EMMessage.Direct.SEND) {
-			holder.tv_ack = (TextView) convertView.findViewById(R.id.tv_ack);
+			//消息是否已读
+            holder.tv_ack = (TextView) convertView.findViewById(R.id.tv_ack);
+            //消息是否送达
 			holder.tv_delivered = (TextView) convertView.findViewById(R.id.tv_delivered);
 			if (holder.tv_ack != null) {
 				if (message.isAcked) {
@@ -447,7 +450,9 @@ public class MessageAdapter extends BaseAdapter{
 			}
 		} else {
 			// 如果是文本或者地图消息并且不是group messgae,chatroom message，显示的时候给对方发送已读回执
-			if ((message.getType() == Type.TXT || message.getType() == Type.LOCATION) && !message.isAcked && chatType != ChatType.GroupChat && chatType != ChatType.ChatRoom) {
+			if ((message.getType() == Type.TXT || message.getType() == Type.LOCATION) &&
+                    !message.isAcked && chatType != ChatType.GroupChat &&
+                    chatType != ChatType.ChatRoom) {
 				// 不是语音通话记录
 				if (!message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
 					try {
@@ -497,6 +502,7 @@ public class MessageAdapter extends BaseAdapter{
 		}
 
 		if (message.direct == EMMessage.Direct.SEND) {
+            //发送消息设置重发按钮
 			View statusView = convertView.findViewById(R.id.msg_status);
 			// 重发按钮点击事件
 			statusView.setOnClickListener(new OnClickListener() {
@@ -526,6 +532,7 @@ public class MessageAdapter extends BaseAdapter{
 			});
 
 		} else {
+            //接收消息设置长按加入黑名单
 			final String st = context.getResources().getString(R.string.Into_the_blacklist);
 			if(!((ChatActivity)activity).isRobot && chatType != ChatType.ChatRoom){
 				// 长按头像，移入黑名单

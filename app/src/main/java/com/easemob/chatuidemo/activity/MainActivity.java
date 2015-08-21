@@ -256,7 +256,8 @@ public class MainActivity extends BaseActivity implements EMEventListener {
                 if(HXSDKHelper.getInstance().isGroupsSyncedWithServer()){
                     HXSDKHelper.getInstance().notifyForRecevingEvents();
                 }
-                
+
+				//从parse服务器获取联系人信息
                 ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().asyncFetchContactInfosFromServer(usernames,new EMValueCallBack<List<User>>() {
 
 					@Override

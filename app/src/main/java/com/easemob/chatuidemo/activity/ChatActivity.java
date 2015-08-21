@@ -267,9 +267,10 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		views.add(gv1);
 		views.add(gv2);
 		expressionViewpager.setAdapter(new ExpressionPagerAdapter(views));
-		edittext_layout.requestFocus();
+		//发送语音相关
 		voiceRecorder = new VoiceRecorder(micImageHandler);
 		buttonPressToSpeak.setOnTouchListener(new PressToSpeakListen());
+		//文本框输入相关
 		mEditTextContent.setOnFocusChangeListener(new OnFocusChangeListener() {
 
 			@Override
@@ -318,11 +319,10 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 			}
 		});
 
+		//下拉加载聊天记录
 		 swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.chat_swipe_layout);
-
 		 swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
 		                 android.R.color.holo_orange_light, android.R.color.holo_red_light);
-
 		 swipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
 
 		         @Override
@@ -336,8 +336,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		                                         try {
 	                                                 if (chatType == CHATTYPE_SINGLE){
                                                          messages = conversation.loadMoreMsgFromDB(adapter.getItem(0).getMsgId(), pagesize);
-	                                                 }
-	                                                 else{
+	                                                 } else{
                                                          messages = conversation.loadMoreGroupMsgFromDB(adapter.getItem(0).getMsgId(), pagesize);
 	                                                 }
 		                                         } catch (Exception e1) {
@@ -380,6 +379,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		chatType = getIntent().getIntExtra("chatType", CHATTYPE_SINGLE);
 
 		if (chatType == CHATTYPE_SINGLE) { // 单聊
+			//设置聊天对象的昵称
 			toChatUsername = getIntent().getStringExtra("userId");
 			Map<String,RobotUser> robotMap=((DemoHXSDKHelper)HXSDKHelper.getInstance()).getRobotList();
 			if(robotMap!=null&&robotMap.containsKey(toChatUsername)){
@@ -395,23 +395,27 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 			}
 		} else {
 			// 群聊
+			//显示群聊图片
 			findViewById(R.id.container_to_group).setVisibility(View.VISIBLE);
 			findViewById(R.id.container_remove).setVisibility(View.GONE);
+            //群聊不支持视频和语音
 			findViewById(R.id.container_voice_call).setVisibility(View.GONE);
 			findViewById(R.id.container_video_call).setVisibility(View.GONE);
 			toChatUsername = getIntent().getStringExtra("groupId");
 
 			if(chatType == CHATTYPE_GROUP){
+				//群聊
 			    onGroupViewCreation();
-			}else{ 
+			}else{
+				//聊天室
 			    onChatRoomViewCreation();
 			}
 		}
         
 		// for chatroom type, we only init conversation and create view adapter on success
+		//聊天室进入成功后会自动调用onConversationInit和onListViewCreation
 		if(chatType != CHATTYPE_CHATROOM){
 		    onConversationInit();
-	        
 	        onListViewCreation();
 	        
 	        // show forward message if the message is not null
@@ -437,8 +441,10 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 
         // 初始化db时，每个conversation加载数目是getChatOptions().getNumberOfMessagesLoaded
         // 这个数目如果比用户期望进入会话界面时显示的个数不一样，就多加载一些
+        //获取最开始的聊天记录
         final List<EMMessage> msgs = conversation.getAllMessages();
         int msgCount = msgs != null ? msgs.size() : 0;
+		//每次进入聊天页面，最多只加载pagesize条数据
         if (msgCount < conversation.getAllMsgCount() && msgCount < pagesize) {
             String msgId = null;
             if (msgs != null && msgs.size() > 0) {
@@ -484,20 +490,25 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
             
         });
 	}
-	
+
+    /**
+     * 聊天listview对话设置
+     */
 	protected void onListViewCreation(){
         adapter = new MessageAdapter(ChatActivity.this, toChatUsername, chatType);
         // 显示消息
         listView.setAdapter(adapter);
         
-        listView.setOnScrollListener(new ListScrollListener());
+        //listView.setOnScrollListener(new ListScrollListener());
         adapter.refreshSelectLast();
 
         listView.setOnTouchListener(new OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                //隐藏键盘
                 hideKeyboard();
+                //隐藏表情
                 more.setVisibility(View.GONE);
                 iv_emoticons_normal.setVisibility(View.VISIBLE);
                 iv_emoticons_checked.setVisibility(View.INVISIBLE);
@@ -1221,7 +1232,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 			btnMore.setVisibility(View.GONE);
 			buttonSend.setVisibility(View.VISIBLE);
 		}
-
+		showKeyboard();
 	}
 
 	/**
@@ -1405,7 +1416,13 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		final ExpressionAdapter expressionAdapter = new ExpressionAdapter(this, 1, list);
 		gv.setAdapter(expressionAdapter);
 		gv.setOnItemClickListener(new OnItemClickListener() {
-
+			/**
+			 * 主要是完成标签的插入和表情中的删除
+			 * @param parent
+			 * @param view
+			 * @param position
+			 * @param id
+			 */
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				String filename = expressionAdapter.getItem(position);
@@ -1489,8 +1506,8 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		// register the event listener when enter the foreground
 		EMChatManager.getInstance().registerEventListener(
 				this,
-				new EMNotifierEvent.Event[] { EMNotifierEvent.Event.EventNewMessage,EMNotifierEvent.Event.EventOfflineMessage,
-						EMNotifierEvent.Event.EventDeliveryAck, EMNotifierEvent.Event.EventReadAck });
+				new EMNotifierEvent.Event[]{EMNotifierEvent.Event.EventNewMessage, EMNotifierEvent.Event.EventOfflineMessage,
+						EMNotifierEvent.Event.EventDeliveryAck, EMNotifierEvent.Event.EventReadAck});
 	}
 
 	@Override
@@ -1535,6 +1552,13 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 			if (getCurrentFocus() != null)
 				manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 		}
+	}
+
+	/**
+	 * 显示软键盘
+	 */
+	private void showKeyboard() {
+		manager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 	}
 
 	/**
@@ -1604,58 +1628,58 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 	 * listview滑动监听listener
 	 * 
 	 */
-	private class ListScrollListener implements OnScrollListener {
-
-		@Override
-		public void onScrollStateChanged(AbsListView view, int scrollState) {
-			switch (scrollState) {
-			case OnScrollListener.SCROLL_STATE_IDLE:
-				/*if (view.getFirstVisiblePosition() == 0 && !isloading && haveMoreData && conversation.getAllMessages().size() != 0) {
-					isloading = true;
-					loadmorePB.setVisibility(View.VISIBLE);
-					// sdk初始化加载的聊天记录为20条，到顶时去db里获取更多					
-					List<EMMessage> messages;
-					EMMessage firstMsg = conversation.getAllMessages().get(0);
-					try {
-						// 获取更多messges，调用此方法的时候从db获取的messages
-						// sdk会自动存入到此conversation中
-						if (chatType == CHATTYPE_SINGLE)
-							messages = conversation.loadMoreMsgFromDB(firstMsg.getMsgId(), pagesize);
-						else
-							messages = conversation.loadMoreGroupMsgFromDB(firstMsg.getMsgId(), pagesize);
-					} catch (Exception e1) {
-						loadmorePB.setVisibility(View.GONE);
-						return;
-					}
-					try {
-						Thread.sleep(300);
-					} catch (InterruptedException e) {
-					}
-					if (messages.size() != 0) {
-						// 刷新ui
-						if (messages.size() > 0) {
-							adapter.refreshSeekTo(messages.size() - 1);
-						}
-						
-						if (messages.size() != pagesize)
-							haveMoreData = false;
-					} else {
-						haveMoreData = false;
-					}
-					loadmorePB.setVisibility(View.GONE);
-					isloading = false;
-
-				}*/
-				break;
-			}
-		}
-
-		@Override
-		public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-		}
-
-	}
+//	private class ListScrollListener implements OnScrollListener {
+//
+//		@Override
+//		public void onScrollStateChanged(AbsListView view, int scrollState) {
+//			switch (scrollState) {
+//			case OnScrollListener.SCROLL_STATE_IDLE:
+//				/*if (view.getFirstVisiblePosition() == 0 && !isloading && haveMoreData && conversation.getAllMessages().size() != 0) {
+//					isloading = true;
+//					loadmorePB.setVisibility(View.VISIBLE);
+//					// sdk初始化加载的聊天记录为20条，到顶时去db里获取更多
+//					List<EMMessage> messages;
+//					EMMessage firstMsg = conversation.getAllMessages().get(0);
+//					try {
+//						// 获取更多messges，调用此方法的时候从db获取的messages
+//						// sdk会自动存入到此conversation中
+//						if (chatType == CHATTYPE_SINGLE)
+//							messages = conversation.loadMoreMsgFromDB(firstMsg.getMsgId(), pagesize);
+//						else
+//							messages = conversation.loadMoreGroupMsgFromDB(firstMsg.getMsgId(), pagesize);
+//					} catch (Exception e1) {
+//						loadmorePB.setVisibility(View.GONE);
+//						return;
+//					}
+//					try {
+//						Thread.sleep(300);
+//					} catch (InterruptedException e) {
+//					}
+//					if (messages.size() != 0) {
+//						// 刷新ui
+//						if (messages.size() > 0) {
+//							adapter.refreshSeekTo(messages.size() - 1);
+//						}
+//
+//						if (messages.size() != pagesize)
+//							haveMoreData = false;
+//					} else {
+//						haveMoreData = false;
+//					}
+//					loadmorePB.setVisibility(View.GONE);
+//					isloading = false;
+//
+//				}*/
+//				break;
+//			}
+//		}
+//
+//		@Override
+//		public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+//
+//		}
+//
+//	}
 
 	@Override
 	protected void onNewIntent(Intent intent) {

@@ -52,7 +52,6 @@ public class HXPreferenceUtils {
 	/**
 	 * 单例模式，获取instance实例
 	 * 
-	 * @param cxt
 	 * @return
 	 */
 	public static HXPreferenceUtils getInstance() {
@@ -62,7 +61,11 @@ public class HXPreferenceUtils {
 		
 		return mPreferenceUtils;
 	}
-	
+
+	/**
+	 * 是否显示通知
+	 * @param paramBoolean
+	 */
 	public void setSettingMsgNotification(boolean paramBoolean) {
 		editor.putBoolean(SHARED_KEY_SETTING_NOTIFICATION, paramBoolean);
 		editor.commit();
@@ -72,6 +75,10 @@ public class HXPreferenceUtils {
 		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_NOTIFICATION, true);
 	}
 
+	/**
+	 * 通知声音
+	 * @param paramBoolean
+	 */
 	public void setSettingMsgSound(boolean paramBoolean) {
 		editor.putBoolean(SHARED_KEY_SETTING_SOUND, paramBoolean);
 		editor.commit();
@@ -82,6 +89,10 @@ public class HXPreferenceUtils {
 		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_SOUND, true);
 	}
 
+	/**
+	 * 通知震动
+	 * @param paramBoolean
+	 */
 	public void setSettingMsgVibrate(boolean paramBoolean) {
 		editor.putBoolean(SHARED_KEY_SETTING_VIBRATE, paramBoolean);
 		editor.commit();
@@ -91,6 +102,10 @@ public class HXPreferenceUtils {
 		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_VIBRATE, true);
 	}
 
+	/**
+	 *扬声器
+	 * @param paramBoolean
+	 */
 	public void setSettingMsgSpeaker(boolean paramBoolean) {
 		editor.putBoolean(SHARED_KEY_SETTING_SPEAKER, paramBoolean);
 		editor.commit();
@@ -99,7 +114,8 @@ public class HXPreferenceUtils {
 	public boolean getSettingMsgSpeaker() {
 		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_SPEAKER, true);
 	}
-	
+
+
 	public void setSettingAllowChatroomOwnerLeave(boolean value) {
         editor.putBoolean(SHARED_KEY_SETTING_CHATROOM_OWNER_LEAVE, value);
         editor.commit();
