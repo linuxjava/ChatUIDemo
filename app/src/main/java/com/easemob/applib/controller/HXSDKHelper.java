@@ -130,7 +130,7 @@ public abstract class HXSDKHelper {
 	private boolean isContactsSyncedWithServer = false;
 
 	private boolean isBlackListSyncedWithServer = false;
-	
+	//是否初始化完成，可以接收IM消息
 	private boolean alreadyNotified = false;
 	
 	public boolean isVoiceCalling;

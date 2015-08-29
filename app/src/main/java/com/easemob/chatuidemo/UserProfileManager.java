@@ -2,6 +2,7 @@ package com.easemob.chatuidemo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.CRC32;
 
 import android.content.Context;
 
@@ -45,6 +46,7 @@ public class UserProfileManager {
 		ParseManager.getInstance().onInit(context);
 		syncContactInfosListeners = new ArrayList<HXSyncListener>();
 		sdkInited = true;
+
 		return true;
 	}
 
@@ -155,11 +157,12 @@ public class UserProfileManager {
 
 			}
 		});
-
 	}
+
 	public void asyncGetUserInfo(final String username,final EMValueCallBack<User> callback){
 		ParseManager.getInstance().asyncGetUserInfo(username, callback);
 	}
+
 	private void setCurrentUserNick(String nickname) {
 		getCurrentUserInfo().setNick(nickname);
 		HXPreferenceUtils.getInstance().setCurrentUserNick(nickname);

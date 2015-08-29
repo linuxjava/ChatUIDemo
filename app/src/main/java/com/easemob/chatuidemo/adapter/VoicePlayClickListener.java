@@ -93,6 +93,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 		if (!(new File(filePath).exists())) {
 			return;
 		}
+		//
 		((ChatActivity) activity).playMsgId = message.getMsgId();
 		AudioManager audioManager = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
 
@@ -167,6 +168,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 		String st = activity.getResources().getString(R.string.Is_download_voice_click_later);
 		if (isPlaying) {
 			if (((ChatActivity) activity).playMsgId != null && ((ChatActivity) activity).playMsgId.equals(message.getMsgId())) {
+				//表示2次点击所播放的语音是同一个
 				currentPlayListener.stopPlayVoice();
 				return;
 			}
@@ -177,6 +179,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 			// for sent msg, we will try to play the voice file directly
 			playVoice(voiceBody.getLocalUrl());
 		} else {
+			//接收语音，需要对语音的状态进行判断
 			if (message.status == EMMessage.Status.SUCCESS) {
 				File file = new File(voiceBody.getLocalUrl());
 				if (file.exists() && file.isFile())
@@ -185,8 +188,6 @@ public class VoicePlayClickListener implements View.OnClickListener {
 					EMLog.e(TAG, "file not exist");
 
 			} else if (message.status == EMMessage.Status.INPROGRESS) {
-				String s=new String();
-				
 				Toast.makeText(activity, st, Toast.LENGTH_SHORT).show();
 			} else if (message.status == EMMessage.Status.FAIL) {
 				Toast.makeText(activity, st, Toast.LENGTH_SHORT).show();

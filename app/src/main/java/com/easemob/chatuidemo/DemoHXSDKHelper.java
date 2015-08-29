@@ -69,12 +69,12 @@ public class DemoHXSDKHelper extends HXSDKHelper{
     protected EMEventListener eventListener = null;
 
     /**
-     * contact list in cache
+     * contact list in cache（维护一份内存联系人列表）
      */
     private Map<String, User> contactList;
     
     /**
-     * robot list in cache
+     * robot list in cache（维护一份内存机器人列表）
      */
     private Map<String, RobotUser> robotList;
     private CallReceiver callReceiver;
@@ -351,9 +351,7 @@ public class DemoHXSDKHelper extends HXSDKHelper{
             }
         };
     }
-    
-    
-    
+
     @Override
     protected void onConnectionConflict(){
         Intent intent = new Intent(appContext, MainActivity.class);
@@ -437,8 +435,12 @@ public class DemoHXSDKHelper extends HXSDKHelper{
 		}
 		return robotList;
 	}
-	
-	
+
+    /**
+     * 判断机器人聊天消息是否是菜单
+     * @param message
+     * @return
+     */
 	public boolean isRobotMenuMessage(EMMessage message) {
 
 		try {
