@@ -127,12 +127,12 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		// MobclickAgent.setDebugMode( true );
 		// --?--
 		MobclickAgent.updateOnlineConfig(this);
-
-		if (getIntent().getBooleanExtra("conflict", false) && !isConflictDialogShow) {
-			showConflictDialog();
-		} else if (getIntent().getBooleanExtra(Constant.ACCOUNT_REMOVED, false) && !isAccountRemovedDialogShow) {
-			showAccountRemovedDialog();
-		}
+		//此处什么情况下被触发，不清楚
+//		if (getIntent().getBooleanExtra("conflict", false) && !isConflictDialogShow) {
+//			showConflictDialog();
+//		} else if (getIntent().getBooleanExtra(Constant.ACCOUNT_REMOVED, false) && !isAccountRemovedDialogShow) {
+//			showAccountRemovedDialog();
+//		}
 
 		inviteMessgeDao = new InviteMessgeDao(this);
 		userDao = new UserDao(this);
@@ -144,8 +144,10 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		settingFragment = new SettingsFragment();
 		fragments = new Fragment[] { chatHistoryFragment, contactListFragment, settingFragment };
 		// 添加显示第一个fragment
-		getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, chatHistoryFragment)
-				.add(R.id.fragment_container, contactListFragment).hide(contactListFragment).show(chatHistoryFragment)
+		getSupportFragmentManager().beginTransaction()
+				.add(R.id.fragment_container, chatHistoryFragment)
+				.add(R.id.fragment_container, contactListFragment).hide(contactListFragment)
+				.show(chatHistoryFragment)
 				.commit();
 		
 		init();
@@ -170,7 +172,33 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		registerInternalDebugReceiver();
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (!isConflict && !isCurrentAccountRemoved) {
+			updateUnreadLabel();
+			updateUnreadAddressLable();
+			EMChatManager.getInstance().activityResumed();
+		}
 
+		// unregister this event listener when this activity enters the
+		// background
+		DemoHXSDKHelper sdkHelper = (DemoHXSDKHelper) DemoHXSDKHelper.getInstance();
+		sdkHelper.pushActivity(this);
+
+		// register the event listener when enter the foreground
+		EMChatManager.getInstance().registerEventListener(this,
+				new EMNotifierEvent.Event[] { EMNotifierEvent.Event.EventNewMessage ,EMNotifierEvent.Event.EventOfflineMessage, EMNotifierEvent.Event.EventConversationListChanged});
+	}
+
+	@Override
+	protected void onStop() {
+		EMChatManager.getInstance().unregisterEventListener(this);
+		DemoHXSDKHelper sdkHelper = (DemoHXSDKHelper) DemoHXSDKHelper.getInstance();
+		sdkHelper.popActivity(this);
+
+		super.onStop();
+	}
 	
 	static void asyncFetchGroupsFromServer(){
 	    HXSDKHelper.getInstance().asyncFetchGroupsFromServer(new EMCallBack(){
@@ -258,20 +286,20 @@ public class MainActivity extends BaseActivity implements EMEventListener {
                 }
 
 				//从parse服务器获取联系人信息
-                ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().asyncFetchContactInfosFromServer(usernames,new EMValueCallBack<List<User>>() {
-
-					@Override
-					public void onSuccess(List<User> uList) {
-					    //保存所有联系人信息
-						((DemoHXSDKHelper)HXSDKHelper.getInstance()).updateContactList(uList);
-						//通知所有监听联系人改变的对象
-						((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().notifyContactInfosSyncListener(true);
-					}
-
-					@Override
-					public void onError(int error, String errorMsg) {
-					}
-				});
+//                ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().asyncFetchContactInfosFromServer(usernames,new EMValueCallBack<List<User>>() {
+//
+//					@Override
+//					public void onSuccess(List<User> uList) {
+//					    //保存所有联系人信息
+//						((DemoHXSDKHelper)HXSDKHelper.getInstance()).updateContactList(uList);
+//						//通知所有监听联系人改变的对象
+//						((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().notifyContactInfosSyncListener(true);
+//					}
+//
+//					@Override
+//					public void onError(int error, String errorMsg) {
+//					}
+//				});
             }
 
             @Override
@@ -389,17 +417,14 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			refreshUI();
 			break;
 		}
-
 		case EventOfflineMessage: {
 			refreshUI();
 			break;
 		}
-
 		case EventConversationListChanged: {
 		    refreshUI();
 		    break;
 		}
-		
 		default:
 			break;
 		}
@@ -469,7 +494,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			public void run() {
 				int count = getUnreadAddressCountTotal();
 				if (count > 0) {
-//					unreadAddressLable.setText(String.valueOf(count));
+					unreadAddressLable.setText(String.valueOf(count));
 					unreadAddressLable.setVisibility(View.VISIBLE);
 				} else {
 					unreadAddressLable.setVisibility(View.INVISIBLE);
@@ -516,7 +541,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	 * 
 	 */
 	public class MyContactListener implements EMContactListener {
-
+		//被添加
 		@Override
 		public void onContactAdded(List<String> usernameList) {			
 			// 保存增加的联系人
@@ -526,12 +551,14 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 				User user = setUserHead(username);
 				// 添加好友时可能会回调added方法两次
 				if (!localUsers.containsKey(username)) {
+					//添加的好友保存到数据库
 					userDao.saveContact(user);
 				}
 				toAddUsers.put(username, user);
 			}
+			//添加的好友保存到内存
 			localUsers.putAll(toAddUsers);
-			// 刷新ui
+			// 刷新联系人列表
 			if (currentTabIndex == 1)
 				contactListFragment.refresh();
 
@@ -544,6 +571,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			for (String username : usernameList) {
 				localUsers.remove(username);
 				userDao.deleteContact(username);
+				//删除邀请信息数据库
 				inviteMessgeDao.deleteMessage(username);
 			}
 			runOnUiThread(new Runnable() {
@@ -892,33 +920,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		return user;
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		if (!isConflict && !isCurrentAccountRemoved) {
-			updateUnreadLabel();
-			updateUnreadAddressLable();
-			EMChatManager.getInstance().activityResumed();
-		}
 
-		// unregister this event listener when this activity enters the
-		// background
-		DemoHXSDKHelper sdkHelper = (DemoHXSDKHelper) DemoHXSDKHelper.getInstance();
-		sdkHelper.pushActivity(this);
-
-		// register the event listener when enter the foreground
-		EMChatManager.getInstance().registerEventListener(this,
-				new EMNotifierEvent.Event[] { EMNotifierEvent.Event.EventNewMessage ,EMNotifierEvent.Event.EventOfflineMessage, EMNotifierEvent.Event.EventConversationListChanged});
-	}
-
-	@Override
-	protected void onStop() {
-		EMChatManager.getInstance().unregisterEventListener(this);
-		DemoHXSDKHelper sdkHelper = (DemoHXSDKHelper) DemoHXSDKHelper.getInstance();
-		sdkHelper.popActivity(this);
-
-		super.onStop();
-	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
@@ -1012,6 +1014,11 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 
 	}
 
+	/**
+	 * 如果APP处理后台时，MainActivity中的时间监听被移除，DemoHXSDKHelper接收事件监听，并启动MainActivity
+	 * 调用onNewIntent
+	 * @param intent
+	 */
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);

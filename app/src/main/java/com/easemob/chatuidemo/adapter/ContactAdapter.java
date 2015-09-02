@@ -44,6 +44,7 @@ import com.easemob.util.EMLog;
  */
 public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexer{
     private static final String TAG = "ContactAdapter";
+	//存储所有索引首字母
 	List<String> list;
 	List<User> userList;
 	List<User> copyUserList;
@@ -69,6 +70,7 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 	    TextView nameTextview;
 	    TextView tvHeader;
     }
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 	    ViewHolder holder;
@@ -90,8 +92,10 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 		//设置nick，demo里不涉及到完整user，用username代替nick显示
 		String username = user.getUsername();
 		String header = user.getHeader();
+		//控制row_contact中头部的字母是否显示
 		if (position == 0 || header != null && !header.equals(getItem(position - 1).getHeader())) {
 			if (TextUtils.isEmpty(header)) {
+				//申请通知、群聊等header为空
 			    holder.tvHeader.setVisibility(View.GONE);
 			} else {
 			    holder.tvHeader.setVisibility(View.VISIBLE);

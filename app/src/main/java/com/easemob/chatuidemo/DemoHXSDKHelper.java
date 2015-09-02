@@ -537,7 +537,7 @@ public class DemoHXSDKHelper extends HXSDKHelper{
     /**
      * update User cach And db
      *
-     * @param contactList
+     * @param contactInfoList
      */
     public void updateContactList(List<User> contactInfoList) {
          for (User u : contactInfoList) {

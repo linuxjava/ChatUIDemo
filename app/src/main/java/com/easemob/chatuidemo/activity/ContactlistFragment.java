@@ -259,7 +259,8 @@ public class ContactlistFragment extends Fragment {
 		
 		blackListSyncListener = new HXBlackListSyncListener();
 		HXSDKHelper.getInstance().addSyncBlackListListener(blackListSyncListener);
-		
+
+		//无作用
 		contactInfoSyncListener = new HXContactInfoSyncListener();
 		((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().addSyncContactInfoListener(contactInfoSyncListener);
 		
@@ -300,6 +301,10 @@ public class ContactlistFragment extends Fragment {
 		return super.onContextItemSelected(item);
 	}
 
+	/**
+	 * 当调show和hide时，被调用
+	 * @param hidden
+	 */
 	@Override
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);

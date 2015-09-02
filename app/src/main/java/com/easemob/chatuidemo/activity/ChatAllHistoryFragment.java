@@ -48,7 +48,6 @@ import com.easemob.chatuidemo.db.InviteMessgeDao;
  * 
  */
 public class ChatAllHistoryFragment extends Fragment implements View.OnClickListener {
-
 	private InputMethodManager inputMethodManager;
 	private ListView listView;
 	private ChatAllHistoryAdapter adapter;
@@ -186,8 +185,10 @@ public class ChatAllHistoryFragment extends Fragment implements View.OnClickList
 		EMConversation tobeDeleteCons = adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
 		// 删除此会话
 		EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup(), deleteMessage);
+		//清除邀请信息
 		InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
 		inviteMessgeDao.deleteMessage(tobeDeleteCons.getUserName());
+		//删除listview中的item
 		adapter.remove(tobeDeleteCons);
 		adapter.notifyDataSetChanged();
 
