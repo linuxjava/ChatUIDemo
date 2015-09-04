@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Pair;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -189,8 +190,9 @@ public class ChatAllHistoryFragment extends Fragment implements View.OnClickList
 		InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
 		inviteMessgeDao.deleteMessage(tobeDeleteCons.getUserName());
 		//删除listview中的item
+		//remove会自动notifyDataSetChanged，不要再调用它
 		adapter.remove(tobeDeleteCons);
-		adapter.notifyDataSetChanged();
+		//adapter.notifyDataSetChanged();
 
 		// 更新消息未读数
 		((MainActivity) getActivity()).updateUnreadLabel();
@@ -211,7 +213,6 @@ public class ChatAllHistoryFragment extends Fragment implements View.OnClickList
 	/**
 	 * 获取所有会话
 	 * 
-	 * @param context
 	 * @return
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         +	 */
 	private List<EMConversation> loadConversationsWithRecentChat() {
@@ -278,6 +279,9 @@ public class ChatAllHistoryFragment extends Fragment implements View.OnClickList
 		}
 	}
 
+	/**
+	 * 这个刷新似乎没什么作用，而且有点多余
+	 */
 	@Override
 	public void onResume() {
 		super.onResume();

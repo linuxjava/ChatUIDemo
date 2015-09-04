@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +57,6 @@ import com.easemob.util.EMLog;
  * 
  */
 public class ChatAllHistoryAdapter extends ArrayAdapter<EMConversation> {
-
 	private static final String TAG = "ChatAllHistoryAdapter";
 	private LayoutInflater inflater;
 	private List<EMConversation> conversationList;
@@ -268,7 +268,8 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<EMConversation> {
 				for (int i = 0; i < count; i++) {
 					final EMConversation value = mOriginalValues.get(i);
 					String username = value.getUserName();
-					
+
+					//如果是"群聊"则，获取群聊的名称
 					EMGroup group = EMGroupManager.getInstance().getGroup(username);
 					if(group != null){
 						username = group.getGroupName();
@@ -318,7 +319,10 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<EMConversation> {
 	    if(!notiyfyByFilter){
             copyConversationList.clear();
             copyConversationList.addAll(conversationList);
-            notiyfyByFilter = false;
-        }
+			Log.d("xiao1", "test1");
+        }else {
+			notiyfyByFilter = false;
+			Log.d("xiao1", "test2");
+		}
 	}
 }
