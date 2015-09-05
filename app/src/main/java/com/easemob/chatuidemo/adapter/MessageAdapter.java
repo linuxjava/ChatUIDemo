@@ -35,6 +35,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 import android.widget.Toast;
@@ -357,6 +358,7 @@ public class MessageAdapter extends BaseAdapter {
             } else if (message.getType() == EMMessage.Type.VOICE) {
                 try {
                     holder.iv = ((ImageView) convertView.findViewById(R.id.iv_voice));
+                    holder.iv_voice_rl = (RelativeLayout) convertView.findViewById(R.id.iv_voice_rl);
                     holder.iv_avatar = (ImageView) convertView.findViewById(R.id.iv_userhead);
                     holder.tv = (TextView) convertView.findViewById(R.id.tv_length);
                     holder.pb = (ProgressBar) convertView.findViewById(R.id.pb_sending);
@@ -745,7 +747,6 @@ public class MessageAdapter extends BaseAdapter {
                 holder.iv.setImageResource(R.drawable.default_image);
                 showDownloadImageProgress(message, holder);
                 // downloadImage(message, holder);
-                Log.d("xiao1", "test1");
             } else {
                 // "!!!! not back receive, show image directly");
                 holder.pb.setVisibility(View.GONE);
@@ -763,8 +764,6 @@ public class MessageAdapter extends BaseAdapter {
                     String thumbnailPath = ImageUtils.getThumbnailImagePath(thumbRemoteUrl);
                     showImageView(thumbnailPath, holder.iv, filePath, imgBody.getRemoteUrl(), message);
                 }
-
-                Log.d("xiao1", "test2");
             }
             return;
         }
@@ -983,7 +982,9 @@ public class MessageAdapter extends BaseAdapter {
         } else {
             holder.tv.setVisibility(View.INVISIBLE);
         }
-        holder.iv.setOnClickListener(new VoicePlayClickListener(message, holder.iv, holder.iv_read_status, this, activity, username));
+        VoicePlayClickListener listener = new VoicePlayClickListener(message, holder.iv, holder.iv_read_status, this, activity, username);
+        holder.iv.setOnClickListener(listener);
+        holder.iv_voice_rl.setOnClickListener(listener);
         holder.iv.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -1540,6 +1541,8 @@ public class MessageAdapter extends BaseAdapter {
 
     public static class ViewHolder {
         ImageView iv;
+        //语音背景
+        RelativeLayout iv_voice_rl;
         TextView tv;
         ProgressBar pb;
         ImageView staus_iv;

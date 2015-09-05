@@ -27,14 +27,33 @@
             android:background="@drawable/mini_avatar_shadow"
             android:scaleType="fitXY" />
 
-        <ImageView
-            android:id="@+id/iv_voice"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
+
+        <RelativeLayout
+            android:id="@+id/iv_voice_rl"
+            android:layout_width="70.0dp"
+            android:layout_height="50dp"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@id/iv_userhead"
             android:background="@drawable/chatto_bg"
-            android:src="@drawable/chatto_voice_playing" />
+            android:clickable="true">
+            <ImageView
+                android:id="@+id/iv_voice"
+                android:layout_width="wrap_content"
+                android:layout_height="30.0dp"
+                android:clickable="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/chatto_voice_playing"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
+
+        <!--<ImageView-->
+            <!--android:id="@+id/iv_voice"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="48dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:layout_toLeftOf="@id/iv_userhead"-->
+            <!--android:background="@drawable/chatto_bg"-->
+            <!--android:src="@drawable/chatto_voice_playing" />-->
 
         <TextView
             android:id="@+id/tv_length"
@@ -42,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/iv_voice"
+            android:layout_toLeftOf="@id/iv_voice_rl"
             android:gravity="center" />
         
         <ImageView

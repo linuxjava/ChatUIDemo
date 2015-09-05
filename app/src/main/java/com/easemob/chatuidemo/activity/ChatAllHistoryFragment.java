@@ -219,7 +219,7 @@ public class ChatAllHistoryFragment extends Fragment implements View.OnClickList
 		// 获取所有会话，包括陌生人
 		Hashtable<String, EMConversation> conversations = EMChatManager.getInstance().getAllConversations();
 		// 过滤掉messages size为0的conversation
-		/**
+		/**c
 		 * 如果在排序过程中有新消息收到，lastMsgTime会发生变化
 		 * 影响排序过程，Collection.sort会产生异常
 		 * 保证Conversation在Sort过程中最后一条消息的时间不变 
