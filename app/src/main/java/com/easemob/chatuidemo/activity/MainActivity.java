@@ -422,7 +422,9 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			break;
 		}
 		case EventConversationListChanged: {
-		    refreshUI();
+			//当会话被删除时，产生此事件，那么需要更新未读消息数
+			updateUnreadLabel();
+		    //refreshUI();
 		    break;
 		}
 		default:

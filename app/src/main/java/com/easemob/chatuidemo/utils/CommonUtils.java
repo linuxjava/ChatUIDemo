@@ -20,6 +20,7 @@ import android.app.ActivityManager.RunningTaskInfo;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.TypedValue;
 
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
@@ -126,4 +127,16 @@ public class CommonUtils {
 			return "";
 	}
 
+    /**
+     * dp转px
+     *
+     * @param context
+     * @param dpVal
+     * @return
+     */
+    public static int dp2px(Context context, float dpVal)
+    {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                dpVal, context.getResources().getDisplayMetrics());
+    }
 }

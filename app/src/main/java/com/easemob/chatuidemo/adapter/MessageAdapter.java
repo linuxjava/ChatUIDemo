@@ -1485,7 +1485,6 @@ public class MessageAdapter extends BaseAdapter {
             });
             return true;
         } else {
-
             new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, message.getChatType(), iv, activity, message);
             return true;
         }

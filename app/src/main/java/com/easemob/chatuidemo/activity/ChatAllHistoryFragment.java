@@ -184,7 +184,10 @@ public class ChatAllHistoryFragment extends Fragment implements View.OnClickList
 			handled = true;
 		}
 		EMConversation tobeDeleteCons = adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
-		// 删除此会话
+		/**
+		 * 删除此会话，删除会话时会发出EventConversationListChanged事件
+		 * MainActivity中onEvent会捕获该事件，并调用updateUnreadLabel更新UI界面
+		 */
 		EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup(), deleteMessage);
 		//清除邀请信息
 		InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
@@ -192,10 +195,10 @@ public class ChatAllHistoryFragment extends Fragment implements View.OnClickList
 		//删除listview中的item
 		//remove会自动notifyDataSetChanged，不要再调用它
 		adapter.remove(tobeDeleteCons);
-		//adapter.notifyDataSetChanged();
 
+		//adapter.notifyDataSetChanged();
 		// 更新消息未读数
-		((MainActivity) getActivity()).updateUnreadLabel();
+		//((MainActivity) getActivity()).updateUnreadLabel();
 		
 		return handled ? true : super.onContextItemSelected(item);
 	}

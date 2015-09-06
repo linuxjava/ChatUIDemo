@@ -319,10 +319,8 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<EMConversation> {
 	    if(!notiyfyByFilter){
             copyConversationList.clear();
             copyConversationList.addAll(conversationList);
-			Log.d("xiao1", "test1");
         }else {
 			notiyfyByFilter = false;
-			Log.d("xiao1", "test2");
 		}
 	}
 }

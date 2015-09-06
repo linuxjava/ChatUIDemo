@@ -14,15 +14,16 @@
 package com.easemob.chatuidemo.task;
 
 import java.io.File;
+import java.io.IOException;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout.LayoutParams;
 
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
@@ -31,6 +32,7 @@ import com.easemob.chatuidemo.activity.ShowBigImage;
 import com.easemob.chatuidemo.utils.CommonUtils;
 import com.easemob.chatuidemo.utils.ImageCache;
 import com.easemob.util.ImageUtils;
+import com.squareup.picasso.Picasso;
 
 public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 	private ImageView iv = null;
@@ -52,18 +54,41 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 		activity = (Activity) args[5];
 		// }
 		message = (EMMessage) args[6];
+
+		int thumbImageSize = CommonUtils.dp2px(activity, 70f);
+
 		File file = new File(thumbnailPath);
 		if (file.exists()) {
-			return ImageUtils.decodeScaleImage(thumbnailPath, 160, 160);
+			return resizeImage2(thumbnailPath, thumbImageSize, thumbImageSize);
+			//return ImageUtils.decodeScaleImage(thumbnailPath, thumbImageSize, thumbImageSize);
 		} else {
 			if (message.direct == EMMessage.Direct.SEND) {
-				return ImageUtils.decodeScaleImage(localFullSizePath, 160, 160);
+				return resizeImage2(localFullSizePath, thumbImageSize, thumbImageSize);
+				//return ImageUtils.decodeScaleImage(localFullSizePath, thumbImageSize, thumbImageSize);
 			} else {
 				return null;
 			}
 		}
-		
+	}
 
+	public Bitmap resizeImage2(String path, int width,int height) {
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;//不加载bitmap到内存中
+		BitmapFactory.decodeFile(path,options);
+		int outWidth = options.outWidth;
+		int outHeight = options.outHeight;
+		options.inDither = false;
+		options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+		options.inSampleSize = 1;
+
+		if (outWidth != 0 && outHeight != 0 && width != 0 && height != 0)
+		{
+			int sampleSize=(outWidth/width+outHeight/height)/2;
+			options.inSampleSize = sampleSize;
+		}
+
+		options.inJustDecodeBounds = false;
+		return BitmapFactory.decodeFile(path, options);
 	}
 
 	protected void onPostExecute(Bitmap image) {
