@@ -745,7 +745,6 @@ public class MessageAdapter extends BaseAdapter {
                 holder.iv.setImageResource(R.drawable.default_image);
                 showDownloadImageProgress(message, holder);
                 // downloadImage(message, holder);
-                Log.d("xiao1", "test1");
             } else {
                 // "!!!! not back receive, show image directly");
                 holder.pb.setVisibility(View.GONE);
@@ -763,8 +762,6 @@ public class MessageAdapter extends BaseAdapter {
                     String thumbnailPath = ImageUtils.getThumbnailImagePath(thumbRemoteUrl);
                     showImageView(thumbnailPath, holder.iv, filePath, imgBody.getRemoteUrl(), message);
                 }
-
-                Log.d("xiao1", "test2");
             }
             return;
         }
@@ -1484,7 +1481,6 @@ public class MessageAdapter extends BaseAdapter {
             });
             return true;
         } else {
-
             new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, message.getChatType(), iv, activity, message);
             return true;
         }

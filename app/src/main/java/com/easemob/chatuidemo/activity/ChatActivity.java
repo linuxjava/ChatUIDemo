@@ -1007,7 +1007,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
         message.setReceipt(to);
         ImageMessageBody body = new ImageMessageBody(new File(filePath));
         // 默认超过100k的图片会压缩后发给对方，可以设置成发送原图
-        // body.setSendOriginalImage(true);
+        //body.setSendOriginalImage(true);
         message.addBody(body);
         if (isRobot) {
             message.setAttribute("em_robot_message", true);
