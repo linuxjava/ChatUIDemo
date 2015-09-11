@@ -1,4 +1,7 @@
 <resources>
+    <dimen name="input_emoji_size">24dp</dimen>
+    <dimen name="point_width">5dp</dimen>
+    <dimen name="point_margin">8dp</dimen>
 
      <dimen name="height_top_bar">46dp</dimen>
     <dimen name="padding_search_bar">5dp</dimen>

@@ -47,6 +47,7 @@ import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.domain.RobotUser;
+import com.easemob.chatuidemo.emoji.EmojiParse;
 import com.easemob.chatuidemo.utils.DateUtils;
 import com.easemob.chatuidemo.utils.SmileUtils;
 import com.easemob.chatuidemo.utils.UserUtils;
@@ -140,7 +141,9 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<EMConversation> {
 		if (conversation.getMsgCount() != 0) {
 			// 把最后一条消息的内容作为item的message内容
 			EMMessage lastMessage = conversation.getLastMessage();
-			holder.message.setText(SmileUtils.getSmiledText(getContext(), getMessageDigest(lastMessage, (this.getContext()))),
+//			holder.message.setText(SmileUtils.getSmiledText(getContext(), getMessageDigest(lastMessage, (this.getContext()))),
+//					BufferType.SPANNABLE);
+			holder.message.setText(EmojiParse.parseString(getContext(), getMessageDigest(lastMessage, (this.getContext()))),
 					BufferType.SPANNABLE);
 
 			holder.time.setText(DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));

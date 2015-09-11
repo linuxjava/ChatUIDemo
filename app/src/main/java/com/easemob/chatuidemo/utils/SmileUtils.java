@@ -20,9 +20,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.Spannable;
 import android.text.Spannable.Factory;
 import android.text.style.ImageSpan;
+import android.util.Log;
 
 import com.easemob.chatuidemo.R;
 
@@ -125,14 +128,15 @@ public class SmileUtils {
 	        while (matcher.find()) {
 	            boolean set = true;
 	            for (ImageSpan span : spannable.getSpans(matcher.start(),
-	                    matcher.end(), ImageSpan.class))
-	                if (spannable.getSpanStart(span) >= matcher.start()
-	                        && spannable.getSpanEnd(span) <= matcher.end())
-	                    spannable.removeSpan(span);
-	                else {
-	                    set = false;
-	                    break;
-	                }
+	                    matcher.end(), ImageSpan.class)) {
+					if (spannable.getSpanStart(span) >= matcher.start()
+							&& spannable.getSpanEnd(span) <= matcher.end())
+						spannable.removeSpan(span);
+					else {
+						set = false;
+						break;
+					}
+				}
 	            if (set) {
 	                hasChanges = true;
 	                spannable.setSpan(new ImageSpan(context, entry.getValue()),

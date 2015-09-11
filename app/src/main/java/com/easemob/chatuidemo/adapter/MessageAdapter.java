@@ -67,6 +67,7 @@ import com.easemob.chatuidemo.activity.ShowBigImage;
 import com.easemob.chatuidemo.activity.ShowNormalFileActivity;
 import com.easemob.chatuidemo.activity.ShowVideoActivity;
 import com.easemob.chatuidemo.activity.UserProfileActivity;
+import com.easemob.chatuidemo.emoji.EmojiParse;
 import com.easemob.chatuidemo.task.LoadImageTask;
 import com.easemob.chatuidemo.task.LoadVideoImageTask;
 import com.easemob.chatuidemo.utils.DateUtils;
@@ -605,7 +606,8 @@ public class MessageAdapter extends BaseAdapter {
      */
     private void handleTextMessage(EMMessage message, ViewHolder holder, final int position) {
         TextMessageBody txtBody = (TextMessageBody) message.getBody();
-        Spannable span = SmileUtils.getSmiledText(context, txtBody.getMessage());
+        //Spannable span = SmileUtils.getSmiledText(context, txtBody.getMessage());
+        Spannable span = EmojiParse.parseString(context, txtBody.getMessage());
         // 设置内容
         holder.tv.setText(span, BufferType.SPANNABLE);
         // 设置长按事件监听

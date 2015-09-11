@@ -86,6 +86,7 @@ import com.easemob.chatuidemo.adapter.ExpressionPagerAdapter;
 import com.easemob.chatuidemo.adapter.MessageAdapter;
 import com.easemob.chatuidemo.adapter.VoicePlayClickListener;
 import com.easemob.chatuidemo.domain.RobotUser;
+import com.easemob.chatuidemo.emoji.EmojiLayout;
 import com.easemob.chatuidemo.utils.CommonUtils;
 import com.easemob.chatuidemo.utils.ImageUtils;
 import com.easemob.chatuidemo.utils.SmileUtils;
@@ -158,16 +159,15 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
     private View buttonSetModeVoice;
     private View buttonSend;
     private View buttonPressToSpeak;
-    // private ViewPager expressionViewpager;
-    private LinearLayout emojiIconContainer;
+    //private LinearLayout emojiIconContainer;
     private LinearLayout btnContainer;
     private ImageView locationImgview;
     private View more;
     private int position;
     private ClipboardManager clipboard;
-    private ViewPager expressionViewpager;
+    //private ViewPager expressionViewpager;
     private InputMethodManager manager;
-    private List<String> reslist;
+    //private List<String> reslist;
     private Drawable[] micImages;
     private int chatType;
     private EMConversation conversation;
@@ -206,6 +206,8 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
     public EMGroup group;
     public EMChatRoom room;
     public boolean isRobot;
+    //表情布局
+    private EmojiLayout mEmojiLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,8 +232,8 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
         buttonSetModeVoice = findViewById(R.id.btn_set_mode_voice);
         buttonSend = findViewById(R.id.btn_send);
         buttonPressToSpeak = findViewById(R.id.btn_press_to_speak);
-        expressionViewpager = (ViewPager) findViewById(R.id.vPager);
-        emojiIconContainer = (LinearLayout) findViewById(R.id.ll_face_container);
+        //expressionViewpager = (ViewPager) findViewById(R.id.vPager);
+        //emojiIconContainer = (LinearLayout) findViewById(R.id.ll_face_container);
         btnContainer = (LinearLayout) findViewById(R.id.ll_btn_container);
         locationImgview = (ImageView) findViewById(R.id.btn_location);
         iv_emoticons_normal = (ImageView) findViewById(R.id.iv_emoticons_normal);
@@ -262,14 +264,17 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
                 getResources().getDrawable(R.drawable.record_animate_14)};
 
         // 表情list
-        reslist = getExpressionRes(35);
-        // 初始化表情viewpager
-        List<View> views = new ArrayList<View>();
-        View gv1 = getGridChildView(1);
-        View gv2 = getGridChildView(2);
-        views.add(gv1);
-        views.add(gv2);
-        expressionViewpager.setAdapter(new ExpressionPagerAdapter(views));
+//        reslist = getExpressionRes(35);
+//        // 初始化表情viewpager
+//        List<View> views = new ArrayList<View>();
+//        View gv1 = getGridChildView(1);
+//        View gv2 = getGridChildView(2);
+//        views.add(gv1);
+//        views.add(gv2);
+//        expressionViewpager.setAdapter(new ExpressionPagerAdapter(views));
+
+        mEmojiLayout = new EmojiLayout(this, mEditTextContent);
+
         //发送语音相关
         voiceRecorder = new VoiceRecorder(micImageHandler);
         buttonPressToSpeak.setOnTouchListener(new PressToSpeakListen());
@@ -293,7 +298,8 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
                 more.setVisibility(View.GONE);
                 iv_emoticons_normal.setVisibility(View.VISIBLE);
                 iv_emoticons_checked.setVisibility(View.INVISIBLE);
-                emojiIconContainer.setVisibility(View.GONE);
+                //emojiIconContainer.setVisibility(View.GONE);
+                mEmojiLayout.hideEmojiLayout();
                 btnContainer.setVisibility(View.GONE);
             }
         });
@@ -517,7 +523,8 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
                 more.setVisibility(View.GONE);
                 iv_emoticons_normal.setVisibility(View.VISIBLE);
                 iv_emoticons_checked.setVisibility(View.INVISIBLE);
-                emojiIconContainer.setVisibility(View.GONE);
+                //emojiIconContainer.setVisibility(View.GONE);
+                mEmojiLayout.hideEmojiLayout();
                 btnContainer.setVisibility(View.GONE);
                 return false;
             }
@@ -748,14 +755,17 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
             iv_emoticons_normal.setVisibility(View.INVISIBLE);
             iv_emoticons_checked.setVisibility(View.VISIBLE);
             btnContainer.setVisibility(View.GONE);
-            emojiIconContainer.setVisibility(View.VISIBLE);
+            //emojiIconContainer.setVisibility(View.VISIBLE);
+            mEmojiLayout.showEmojiLayout();
             hideKeyboard();
         } else if (id == R.id.iv_emoticons_checked) { // 点击隐藏表情框
             iv_emoticons_normal.setVisibility(View.VISIBLE);
             iv_emoticons_checked.setVisibility(View.INVISIBLE);
             btnContainer.setVisibility(View.VISIBLE);
-            emojiIconContainer.setVisibility(View.GONE);
+            //emojiIconContainer.setVisibility(View.GONE);
+            mEmojiLayout.hideEmojiLayout();
             more.setVisibility(View.GONE);
+            showKeyboard();
 
         } else if (id == R.id.btn_video) {
             // 点击摄像图标
@@ -1205,7 +1215,8 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
         iv_emoticons_normal.setVisibility(View.VISIBLE);
         iv_emoticons_checked.setVisibility(View.INVISIBLE);
         btnContainer.setVisibility(View.VISIBLE);
-        emojiIconContainer.setVisibility(View.GONE);
+        //emojiIconContainer.setVisibility(View.GONE);
+        mEmojiLayout.hideEmojiLayout();
     }
 
     /**
@@ -1282,10 +1293,12 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
             hideKeyboard();
             more.setVisibility(View.VISIBLE);
             btnContainer.setVisibility(View.VISIBLE);
-            emojiIconContainer.setVisibility(View.GONE);
+            //emojiIconContainer.setVisibility(View.GONE);
+            mEmojiLayout.hideEmojiLayout();
         } else {
-            if (emojiIconContainer.getVisibility() == View.VISIBLE) {
-                emojiIconContainer.setVisibility(View.GONE);
+            if (mEmojiLayout.getEmojiLayoutVisibility() == View.VISIBLE) {
+                //emojiIconContainer.setVisibility(View.GONE);
+                mEmojiLayout.hideEmojiLayout();
                 btnContainer.setVisibility(View.VISIBLE);
                 iv_emoticons_normal.setVisibility(View.VISIBLE);
                 iv_emoticons_checked.setVisibility(View.INVISIBLE);
@@ -1409,83 +1422,83 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
      * @param i
      * @return
      */
-    private View getGridChildView(int i) {
-        View view = View.inflate(this, R.layout.expression_gridview, null);
-        ExpandGridView gv = (ExpandGridView) view.findViewById(R.id.gridview);
-        List<String> list = new ArrayList<String>();
-        if (i == 1) {
-            List<String> list1 = reslist.subList(0, 20);
-            list.addAll(list1);
-        } else if (i == 2) {
-            list.addAll(reslist.subList(20, reslist.size()));
-        }
-        list.add("delete_expression");
-        final ExpressionAdapter expressionAdapter = new ExpressionAdapter(this, 1, list);
-        gv.setAdapter(expressionAdapter);
-        gv.setOnItemClickListener(new OnItemClickListener() {
-            /**
-             * 主要是完成标签的插入和表情中的删除
-             * @param parent
-             * @param view
-             * @param position
-             * @param id
-             */
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String filename = expressionAdapter.getItem(position);
-                try {
-                    // 文字输入框可见时，才可输入表情
-                    // 按住说话可见，不让输入表情
-                    if (buttonSetModeKeyboard.getVisibility() != View.VISIBLE) {
-
-                        if (filename != "delete_expression") { // 不是删除键，显示表情
-                            // 这里用的反射，所以混淆的时候不要混淆SmileUtils这个类
-                            Class clz = Class.forName("com.easemob.chatuidemo.utils.SmileUtils");
-                            Field field = clz.getField(filename);
-                            mEditTextContent.append(SmileUtils.getSmiledText(ChatActivity.this,
-                                    (String) field.get(null)));
-                        } else { // 删除文字或者表情
-                            if (!TextUtils.isEmpty(mEditTextContent.getText())) {
-
-                                int selectionStart = mEditTextContent.getSelectionStart();// 获取光标的位置
-                                if (selectionStart > 0) {
-                                    String body = mEditTextContent.getText().toString();
-                                    String tempStr = body.substring(0, selectionStart);
-                                    int i = tempStr.lastIndexOf("[");// 获取最后一个表情的位置
-                                    if (i != -1) {
-                                        CharSequence cs = tempStr.substring(i, selectionStart);
-                                        if (SmileUtils.containsKey(cs.toString()))
-                                            mEditTextContent.getEditableText().delete(i, selectionStart);
-                                        else
-                                            mEditTextContent.getEditableText().delete(selectionStart - 1,
-                                                    selectionStart);
-                                    } else {
-                                        mEditTextContent.getEditableText().delete(selectionStart - 1, selectionStart);
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                } catch (Exception e) {
-                }
-
-            }
-        });
-        return view;
-    }
-
-    public List<String> getExpressionRes(int getSum) {
-        List<String> reslist = new ArrayList<String>();
-        for (int x = 1; x <= getSum; x++) {
-            String filename = "ee_" + x;
-
-            reslist.add(filename);
-
-        }
-        return reslist;
-
-    }
+//    private View getGridChildView(int i) {
+//        View view = View.inflate(this, R.layout.expression_gridview, null);
+//        ExpandGridView gv = (ExpandGridView) view.findViewById(R.id.gridview);
+//        List<String> list = new ArrayList<String>();
+//        if (i == 1) {
+//            List<String> list1 = reslist.subList(0, 20);
+//            list.addAll(list1);
+//        } else if (i == 2) {
+//            list.addAll(reslist.subList(20, reslist.size()));
+//        }
+//        list.add("delete_expression");
+//        final ExpressionAdapter expressionAdapter = new ExpressionAdapter(this, 1, list);
+//        gv.setAdapter(expressionAdapter);
+//        gv.setOnItemClickListener(new OnItemClickListener() {
+//            /**
+//             * 主要是完成标签的插入和表情中的删除
+//             * @param parent
+//             * @param view
+//             * @param position
+//             * @param id
+//             */
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                String filename = expressionAdapter.getItem(position);
+//                try {
+//                    // 文字输入框可见时，才可输入表情
+//                    // 按住说话可见，不让输入表情
+//                    if (buttonSetModeKeyboard.getVisibility() != View.VISIBLE) {
+//
+//                        if (filename != "delete_expression") { // 不是删除键，显示表情
+//                            // 这里用的反射，所以混淆的时候不要混淆SmileUtils这个类
+//                            Class clz = Class.forName("com.easemob.chatuidemo.utils.SmileUtils");
+//                            Field field = clz.getField(filename);
+//                            mEditTextContent.append(SmileUtils.getSmiledText(ChatActivity.this,
+//                                    (String) field.get(null)));
+//                        } else { // 删除文字或者表情
+//                            if (!TextUtils.isEmpty(mEditTextContent.getText())) {
+//
+//                                int selectionStart = mEditTextContent.getSelectionStart();// 获取光标的位置
+//                                if (selectionStart > 0) {
+//                                    String body = mEditTextContent.getText().toString();
+//                                    String tempStr = body.substring(0, selectionStart);
+//                                    int i = tempStr.lastIndexOf("[");// 获取最后一个表情的位置
+//                                    if (i != -1) {
+//                                        CharSequence cs = tempStr.substring(i, selectionStart);
+//                                        if (SmileUtils.containsKey(cs.toString()))
+//                                            mEditTextContent.getEditableText().delete(i, selectionStart);
+//                                        else
+//                                            mEditTextContent.getEditableText().delete(selectionStart - 1,
+//                                                    selectionStart);
+//                                    } else {
+//                                        mEditTextContent.getEditableText().delete(selectionStart - 1, selectionStart);
+//                                    }
+//                                }
+//                            }
+//
+//                        }
+//                    }
+//                } catch (Exception e) {
+//                }
+//
+//            }
+//        });
+//        return view;
+//    }
+//
+//    public List<String> getExpressionRes(int getSum) {
+//        List<String> reslist = new ArrayList<String>();
+//        for (int x = 1; x <= getSum; x++) {
+//            String filename = "ee_" + x;
+//
+//            reslist.add(filename);
+//
+//        }
+//        return reslist;
+//
+//    }
 
     @Override
     protected void onDestroy() {
